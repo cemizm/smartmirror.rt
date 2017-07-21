@@ -7,7 +7,7 @@ class Server {
   public app: any;
   private server: any;
   private io: any;
-  private port: number;
+  private port: any;
 
   constructor() {
     this.createApp();
@@ -26,7 +26,7 @@ class Server {
   }
 
   private config(): void {
-    this.port = +process.env.PORT || this.PORT;
+    this.port = process.env.PORT || this.PORT;
   }
 
   private sockets(): void {
@@ -34,8 +34,7 @@ class Server {
   }
 
   private listen(): void {
-    this.server.listen(this.port, () => {
-    });
+    this.server.listen(this.port, () => {});
 
     this.io.on("connect", (socket: any) => {
       const mirrorId = socket.handshake.query.mirrorId;
@@ -44,8 +43,7 @@ class Server {
         socket.join(mirrorId);
       } else {
         socket.on("update", (mirror: any) => {
-          if (mirror && mirror.id)
-            socket.to(mirror.id).emit("update", mirror);
+          if (mirror && mirror.id) socket.to(mirror.id).emit("update", mirror);
         });
 
         socket.on("action", (action: any) => {
